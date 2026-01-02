@@ -1,11 +1,23 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import RankerCard from '@/components/RankerCard';
 import Sidebar from '@/components/Sidebar';
+import ResultsChart from '@/components/ResultsChart';
 
 export default function Results() {
   const router = useRouter();
+  const [viewMode, setViewMode] = useState<'card' | 'chart'>('card');
+
+  // Top 3 candidates data
+  const topCandidates = [
+    { name: 'Vikram Singh', votes: 5234, percentage: 34.3, image: '/modiji.png' },
+    { name: 'Rahul Sharma', votes: 4123, percentage: 27.0, image: '/rahulji.png' },
+    { name: 'Priya Patel', votes: 2876, percentage: 18.8, image: '/rahulji.png' }
+  ];
+
+  const totalVotes = 15234;
 
   return (
     <div className="min-h-screen bg-gray-200 flex">
@@ -24,11 +36,25 @@ export default function Results() {
                   <span className="px-3 py-1 bg-red-100 text-red-800 text-sm rounded-full font-medium">Live</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">
+                  <button 
+                    onClick={() => setViewMode('card')}
+                    className={`px-4 py-2 rounded-lg text-sm transition-colors ${
+                      viewMode === 'card' 
+                        ? 'bg-blue-600 text-white' 
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
                     <i className="fas fa-th-large mr-2"></i>
                     Card View
                   </button>
-                  <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300">
+                  <button 
+                    onClick={() => setViewMode('chart')}
+                    className={`px-4 py-2 rounded-lg text-sm transition-colors ${
+                      viewMode === 'chart' 
+                        ? 'bg-blue-600 text-white' 
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
                     <i className="fas fa-chart-bar mr-2"></i>
                     Chart View
                   </button>
@@ -66,32 +92,37 @@ export default function Results() {
         <div className="p-8 pt-0">
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">Top 3 Ranked Candidates</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <RankerCard
-                rank={1}
-                name="Vikram Singh"
-                party="Reform Party"
-                votes={5234}
-                percentage={34.3}
-                image="/modiji.png"
-              />
-              <RankerCard
-                rank={2}
-                name="Rahul Sharma"
-                party="Progressive Party"
-                votes={4123}
-                percentage={27.0}
-                image="/rahulji.png"
-              />
-              <RankerCard
-                rank={3}
-                name="Priya Patel"
-                party="Green Future"
-                votes={2876}
-                percentage={18.8}
-                image="/rahulji.png"
-              />
-            </div>
+            
+            {viewMode === 'card' ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <RankerCard
+                  rank={1}
+                  name="Vikram Singh"
+                  party="Reform Party"
+                  votes={5234}
+                  percentage={34.3}
+                  image="/modiji.png"
+                />
+                <RankerCard
+                  rank={2}
+                  name="Rahul Sharma"
+                  party="Progressive Party"
+                  votes={4123}
+                  percentage={27.0}
+                  image="/rahulji.png"
+                />
+                <RankerCard
+                  rank={3}
+                  name="Priya Patel"
+                  party="Green Future"
+                  votes={2876}
+                  percentage={18.8}
+                  image="/rahulji.png"
+                />
+              </div>
+            ) : (
+              <ResultsChart candidates={topCandidates} totalVotes={totalVotes} />
+            )}
           </div>
         </div>
 
