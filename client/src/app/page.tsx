@@ -87,6 +87,7 @@ export default function Home() {
   const handleAdminLogin = () => {
     router.push("/admin");
   };
+  
   const handleVoterDashboard = () => {
     router.push("/dashboard");
   };
